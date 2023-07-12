@@ -3,18 +3,124 @@
         xmlns:vm="using:PasswordGenerator.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="720" d:DesignHeight="440"
         x:Class="PasswordGenerator.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="PasswordGenerator">
+        Width="720" Height="440"
+        CanResize="False"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True">
+    
+    <Window.Styles>
+        <Style Selector="StackPanel.center">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
+        </Style>
+        <Style Selector="Label.toggleSwitchLabel">
+            <Setter Property="Margin" Value="0, 3, 20, 0"/>
+        </Style>
+        <Style Selector="Button.b1">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="20"/>
+        </Style>
+    </Window.Styles>
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial BackgroundSource="Digger"
+                                             TintColor="Black"
+                                             TintOpacity="1"
+                                             MaterialOpacity="0.45"/>
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+        
+        <Grid RowDefinitions="1*, 12*">
+            <Border Grid.Row="0" 
+                    BorderThickness="0, 0, 0,  2"
+                    BorderBrush="white">
+                <Label Content="Password Generator [Avalonia]"
+                       VerticalAlignment="Center"
+                       Margin="10, 0, 0, 0"/>
+            </Border>
+            
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center">
+                <StackPanel Classes="center">
+                    <TextBox Name="GeneratedPasswordBox" 
+                             Text="{Binding GeneratedPassword}"
+                             IsEnabled="False"
+                             Foreground="White"
+                             Width="450" Margin="0, 25, 0, 0" PasswordChar="*"
+                             RevealPassword="{Binding ElementName=ShowPassword, Path=IsChecked}">
+                    </TextBox>
+                    
+                    <ToggleButton Name="ShowPassword" Width="70" Height="30" Content="Show"
+                                  HorizontalContentAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Margin="20, 25, 0, 0"/>
+                    
+                    <Button Name="Copy" Width="70" Height="30" Content="Copy"
+                            HorizontalContentAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="20, 25, 0, 0"
+                            Command="{Binding CopyCommand}"/>
+                </StackPanel>
+                
+                <Slider Value="{Binding PasswordLength}" Minimum="1" Maximum="50"/>
+                
+                <StackPanel Classes="center">
+                    <Label Content="Lenght: "/>
+                    <Label Content="{Binding PasswordLength}"/>
+                </StackPanel>
+                
+                <StackPanel Classes="center" 
+                            Margin="0, 20, 0, 0">
+                    <Label Content="Allow Numbers (0-9)" 
+                           Classes="toggleSwitchLabel"/>
+                    <ToggleSwitch IsChecked="{Binding AllowNumbers}"/>
+                </StackPanel>
+                
+                <StackPanel Classes="center" 
+                            Margin="0, 10, 0, 0">
+                    <Label Content="Allow Uppercase (ABC)" 
+                           Classes="toggleSwitchLabel"/>
+                    <ToggleSwitch IsChecked="{Binding AllowUppercase}"/>
+                </StackPanel>
+                
+                <StackPanel Classes="center" 
+                            Margin="0, 10, 0, 0">
+                    <Label Content="Allow Lowercase (abc)" 
+                           Classes="toggleSwitchLabel"/>
+                    <ToggleSwitch IsChecked="{Binding AllowLowercase}"/>
+                </StackPanel>
+                
+                <StackPanel Classes="center" 
+                            Margin="0, 10, 0, 0">
+                    <Label Content="Allow Symbols (!@#$%^*()+)" 
+                           Classes="toggleSwitchLabel"/>
+                    <ToggleSwitch IsChecked="{Binding AllowSymbols}"/>
+                </StackPanel>
+                
+                <StackPanel Classes="center">
+                    <Button Classes="b1" 
+                            Width="100" Height="35"
+                            Content="Generate" 
+                            Command="{Binding GenerateCommand}"/>
+                    <Button Classes="b1" 
+                            Width="100" Height="35"
+                            Content="Save"
+                            Command="{Binding OpenSavePasswordFormCommand}"/>
+                    <Button Classes="b1" 
+                            Width="100" Height="35"
+                            Content="Passwords"
+                            Command="{Binding OpenPasswordsListCommand}"/>
+                </StackPanel>
+                
+            </StackPanel>
+        </Grid>
+    </Panel>
 </Window>
